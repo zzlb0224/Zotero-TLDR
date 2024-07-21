@@ -184,7 +184,7 @@ function onUpdateItems(items: Zotero.Item[], forceFetch: boolean = false) {
         text: `${getString("popWindow-succeed")}: ${succeedItems.length
           }; ${getString("popWindow-failed")}: ${failedItems.length}`,
       });
-      popupWin.startCloseTimer(3000);
+      popupWin.startCloseTimer(11000);// 更新不用太快。弹出框大于5s-10s随机数
     })();
   })();
 }
