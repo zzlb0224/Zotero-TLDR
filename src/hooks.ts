@@ -95,14 +95,17 @@ async function onPrefsEvent(type: string, data: { [key: string]: any }) {
 
 function onLoad() {
   (async () => {
+    Zotero.Promise.delay(20000)//启动的时候延时处理，太多插件启动会卡白屏
     let needFetchItems: Zotero.Item[] = [];
     for (const lib of Zotero.Libraries.getAll()) {
       needFetchItems = needFetchItems.concat(
         (await Zotero.Items.getAll(lib.id)).filter((item: Zotero.Item) => {
-          return item.isRegularItem() && !item.isCollection();
+          return item.isRegularItem()
+          //&& !item.isCollection(); //这个函数没了？
         }),
       );
     }
+    await Zotero.Promise.delay(Math.random() * 5000 + 5000);// 更新不用太快。5s-10s随机数
     onUpdateItems(needFetchItems, false);
   })();
 }
@@ -164,14 +167,12 @@ function onUpdateItems(items: Zotero.Item[], forceFetch: boolean = false) {
         (await new TLDRFetcher(item).fetchTLDR())
           ? succeedItems.push(item)
           : failedItems.push(item);
-        await Zotero.Promise.delay(50);
+        await Zotero.Promise.delay(Math.random() * 5000 + 5000);// 更新不用太快。5s-10s随机数
         popupWin.changeLine({
           progress: (index * 100) / count,
-          text: `${getString("popWindow-waiting")}: ${
-            count - index - 1
-          }; ${getString("popWindow-succeed")}: ${
-            succeedItems.length
-          }; ${getString("popWindow-failed")}: ${failedItems.length}`,
+          text: `${getString("popWindow-waiting")}: ${count - index - 1
+            }; ${getString("popWindow-succeed")}: ${succeedItems.length
+            }; ${getString("popWindow-failed")}: ${failedItems.length}`,
         });
       }
     })();
@@ -180,9 +181,8 @@ function onUpdateItems(items: Zotero.Item[], forceFetch: boolean = false) {
       popupWin.changeLine({
         type: "success",
         progress: 100,
-        text: `${getString("popWindow-succeed")}: ${
-          succeedItems.length
-        }; ${getString("popWindow-failed")}: ${failedItems.length}`,
+        text: `${getString("popWindow-succeed")}: ${succeedItems.length
+          }; ${getString("popWindow-failed")}: ${failedItems.length}`,
       });
       popupWin.startCloseTimer(3000);
     })();
