@@ -105,7 +105,7 @@ function onLoad() {
         }),
       );
     }
-    await Zotero.Promise.delay(Math.random() * 5000 + 5000);// 更新不用太快。5s-10s随机数
+    await Zotero.Promise.delay(10000);// 更新不用太快。随机数
     onUpdateItems(needFetchItems, false);
   })();
 }
@@ -167,7 +167,7 @@ function onUpdateItems(items: Zotero.Item[], forceFetch: boolean = false) {
         (await new TLDRFetcher(item).fetchTLDR())
           ? succeedItems.push(item)
           : failedItems.push(item);
-        await Zotero.Promise.delay(Math.random() * 5000 + 5000);// 更新不用太快。5s-10s随机数
+        await Zotero.Promise.delay(Math.random() * 2000 + 3000);// 更新不用太快。2s-5s随机数
         popupWin.changeLine({
           progress: (index * 100) / count,
           text: `${getString("popWindow-waiting")}: ${count - index - 1
@@ -184,7 +184,7 @@ function onUpdateItems(items: Zotero.Item[], forceFetch: boolean = false) {
         text: `${getString("popWindow-succeed")}: ${succeedItems.length
           }; ${getString("popWindow-failed")}: ${failedItems.length}`,
       });
-      popupWin.startCloseTimer(11000);// 更新不用太快。弹出框大于5s-10s随机数
+      popupWin.startCloseTimer(6000);// 更新不用太快。弹出框时间
     })();
   })();
 }
